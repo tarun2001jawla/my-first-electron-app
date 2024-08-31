@@ -1,18 +1,25 @@
 {
   "name": "my-electron-app",
+  "productName": "Image Resizer",
   "version": "1.0.0",
   "description": "My Electron app with TypeScript",
   "main": "dist/main.js",
   "scripts": {
     "start": "npm run build && electron .",
     "build": "npx tsc",
-    "watch": "npx tsc -w"
+    "watch": "npx tsc -w",
+    "dev": "nodemon --exec 'npx tsc && electron .' --watch src --ext ts,tsx"
   },
   "author": "Tarun Jawla",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.0.0",
     "electron": "^28.0.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "nodemon": "^3.1.4"
+  },
+  "dependencies": {
+    "resize-img": "^2.0.0",
+    "toastify-js": "^1.12.0"
   }
 }
