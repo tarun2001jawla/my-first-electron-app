@@ -1,5 +1,15 @@
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-import path from "path";
+import {
+  app,
+  BrowserWindow,
+  Menu,
+  ipcMain,
+  MenuItemConstructorOptions,
+  shell
+} from "electron";
+import path, { join } from "path";
+import os from "os";
+import fs from "fs";
+import resizeImg from 'resize-img'
 
 // Determine platform and environment
 const isMac: boolean = process.platform === "darwin";
@@ -11,11 +21,11 @@ const createMainWindow = (): void => {
     title: "Image Resizer App",
     width: isDevMode ? 1000 : 500,
     height: 800,
-    webPreferences : {
-      contextIsolation : true,
-      nodeIntegration : true,
-      preload :  path.join(__dirname,'preload.js')
-    }
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, "renderer", "js", "preload.js"),
+    },
   });
 
   if (isDevMode) {
@@ -88,7 +98,38 @@ app.whenReady().then(() => {
     }
   });
 });
+//respond to ipcRenderer
+ipcMain.on("resize-image", (e, options) => {
+  options.dest = path.join(os.homedir(), "imageResizer");
+  resizeImage();
+});
 
+//Resize the image
+const resizeImage = async ({width ,height,imagePath,dest })=>{
+  try {
+  const newPath = await resizeImg(fs.readFileSync(imagePath), {
+    width : +width,
+    height : +  height,
+  });
+  const fileName = path.basename(imagePath);
+
+  //crrate dest folde if doesnt exists 
+
+  if(!fs.existsSync(dest)){
+    fs.mkdirSync(dest)
+
+  }
+
+  //write file to dest folder
+
+  fs.writeFileSync(path.join(dest, fileName), newPath)
+
+  //open the dest folder so that we can see image 
+
+  } catch(e){
+    console.log(e)
+  }
+}
 // Handle all windows closed event
 app.on("window-all-closed", () => {
   if (!isMac) {

@@ -14,9 +14,10 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@types/resize-img": "^2.0.3",
     "electron": "^28.0.0",
-    "typescript": "^5.5.4",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "resize-img": "^2.0.0",

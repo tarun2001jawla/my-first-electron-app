@@ -17,8 +17,8 @@ const createMainWindow = () => {
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: true,
-            preload: path_1.default.join(__dirname, 'preload.js')
-        }
+            preload: path_1.default.join(__dirname, 'renderer', 'js', "preload.js"),
+        },
     });
     if (isDevMode) {
         mainWindow.webContents.openDevTools();
@@ -81,6 +81,10 @@ electron_1.app.whenReady().then(() => {
             createMainWindow();
         }
     });
+});
+//respond to ipcRenderer
+electron_1.ipcMain.on("resize-image", (e, options) => {
+    console.log("options", options);
 });
 // Handle all windows closed event
 electron_1.app.on("window-all-closed", () => {
