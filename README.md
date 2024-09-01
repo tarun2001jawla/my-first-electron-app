@@ -11,7 +11,7 @@ The **Image Resizer App** is a desktop application built with Electron that allo
 
 ## Screenshots
 
-![Image Resizer App Screenshot](./public/screenshot.png)
+![Image Resizer App Screenshot](src\public\screenshot.png)
 
 ## Installation
 
