@@ -1,6 +1,4 @@
-
-
-// Get elements
+// Get elements from the DOM
 const imgForm = document.querySelector("#img-form");
 const widthInput = document.querySelector("#width");
 const heightInput = document.querySelector("#height");
@@ -20,6 +18,7 @@ const showToast = (message, type = "info") => {
   });
 };
 
+// Load and display image dimensions when an image is selected
 const loadImage = (e) => {
   const target = e.target;
   const file = target.files?.[0];
@@ -33,10 +32,11 @@ const loadImage = (e) => {
   const image = new Image();
   image.src = URL.createObjectURL(file);
   image.onload = () => {
-    widthInput.value = image.naturalWidth;
-    heightInput.value = image.naturalHeight;
+    widthInput.value = image.naturalWidth; // Set width input value to the image's natural width
+    heightInput.value = image.naturalHeight; // Set height input value to the image's natural height
   };
 
+  // Display image details if the file is valid
   if (file && isFileValidImage(file)) {
     imgForm.style.display = "block";
     filenameSpan.innerText = file.name;
@@ -45,7 +45,7 @@ const loadImage = (e) => {
   }
 };
 
-// Handle form submission
+// Handle form submission to send image resize request
 const sendImage = (e) => {
   e.preventDefault();
 
@@ -64,21 +64,17 @@ const sendImage = (e) => {
     return;
   }
 
-  
- 
-    // Send image data and dimensions to the main process
-    ipcRenderer.send('resize-image', {
-      imageData: imagePath,
-      width,
-      height,
-      fileName: file.name,
-    });
-    showToast("Image resize request sent", "info");
-  
-  
+  // Send image data and dimensions to the main process
+  ipcRenderer.send('resize-image', {
+    imageData: imagePath,
+    width,
+    height,
+    fileName: file.name,
+  });
+  showToast("Image resize request sent", "info");
 };
 
-// Check if the file is a valid image
+// Check if the file is a valid image format
 const isFileValidImage = (file) => {
   const fileExt = file.name.split(".").pop()?.toLowerCase();
   return ["jpg", "jpeg", "png"].includes(fileExt || "");
